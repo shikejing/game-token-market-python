@@ -1,7 +1,16 @@
 import uvicorn
 from fastapi import FastAPI
 
-app = FastAPI()
+from app.api import router as market_router
+from app.service import get_service
+
+app = FastAPI(title="Game Token Market")
+app.include_router(market_router)
+
+
+@app.on_event("startup")
+def _startup() -> None:
+    get_service().start()
 
 
 @app.get("/")
